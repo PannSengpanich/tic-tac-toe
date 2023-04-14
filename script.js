@@ -1,3 +1,4 @@
+//everthing interacting with the board of the game
 function GameBoard() {
   const rows = 3;
   const columns = 3;
@@ -18,9 +19,10 @@ function GameBoard() {
       board[row][column].mark(playerValue);
     }
   };
+  //print to the console
   const printBoard = () => {
     const boardWithCellValues = board.map((row) =>
-      row.map((cell) => cell.getValue())
+      row.map((cell) => cell.getValue()),
     );
     console.log(boardWithCellValues);
   };
@@ -36,10 +38,7 @@ function Cell() {
   return { mark, getValue };
 }
 
-function GameController(
-  playerOneName = "Player One",
-  playerTwoName = "Player Two"
-) {
+function GameController(playerOneName, playerTwoName) {
   const gameBoard = GameBoard();
   const players = [
     {
@@ -70,6 +69,13 @@ function GameController(
       alert(`The winner is ${activePlayer.name}!`);
       console.log(`The winner is ${activePlayer.name}!`);
       resetGame();
+      return;
+    }
+    if (checkForDraw()) {
+      alert("This match is draw");
+      console.log("this match is draw");
+      resetGame();
+      return;
     }
     switchPlayerTurn();
     printNewRound();
@@ -104,13 +110,29 @@ function GameController(
     //check diagonal top-right to bottom-left
     for (let i = 0; i < board.length; i++) {
       const diagonal1 = board.map(
-        (row, index) => row[board.length - index - 1]
+        (row, index) => row[board.length - index - 1],
       );
       if (diagonal1.every((cell) => cell.getValue() === activePlayer.symbol)) {
         winnerFound = true;
       }
     }
     return winnerFound;
+  };
+  const checkForDraw = () => {
+    let board = gameBoard.getBoard();
+    let cellsFilled = 0;
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (board[i][j].getValue() != "") {
+          cellsFilled++;
+        }
+      }
+    }
+    if (cellsFilled == 9 && !checkForWinner()) {
+      return true;
+    } else {
+      return false;
+    }
   };
   const resetGame = () => {
     gameBoard.getBoard().forEach((row) => {
@@ -119,8 +141,6 @@ function GameController(
       });
     });
     activePlayer = players[0];
-    ScreenController().updateScreen();
-    printNewRound();
   };
   printNewRound();
 
@@ -131,7 +151,15 @@ function GameController(
   };
 }
 function ScreenController() {
-  const game = GameController();
+  let p1name = prompt("Enter your first player name: ");
+  let p2name = prompt("Enter your second player name: ");
+  if (p1name == "") {
+    p1name = "Player One";
+  }
+  if (p2name == "") {
+    p2name = "Player Two";
+  }
+  const game = GameController(p1name, p2name);
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
 
@@ -150,7 +178,7 @@ function ScreenController() {
     board.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
         const cellButton = document.createElement("button");
-        cellButton.classList.add("cell");
+        cellButton.classList.add("cell", "square");
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = columnIndex;
         cellButton.textContent = cell.getValue();
@@ -168,6 +196,7 @@ function ScreenController() {
     updateScreen();
   }
   boardDiv.addEventListener("click", clickHandlerBoard);
+
   // Initial render
   updateScreen();
   return { updateScreen };
