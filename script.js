@@ -13,8 +13,8 @@ function GameBoard() {
 
   const markSpace = (row, column, playerValue) => {
     //check if that space is already occupied or not
-    if (board[row][column]) return;
-    else {
+    if (board[row][column].getValue() !== "") {
+    } else {
       board[row][column].mark(playerValue);
     }
   };
@@ -29,8 +29,8 @@ function GameBoard() {
 
 function Cell() {
   let value = "";
-  const mark = (playerValue) => {
-    value = playerValue;
+  const mark = (symbol) => {
+    value = symbol;
   };
   const getValue = () => value;
   return { mark, getValue };
@@ -40,7 +40,7 @@ function GameController(
   playerOneName = "Player One",
   playerTwoName = "Player Two"
 ) {
-  const board = GameBoard();
+  const gameBoard = GameBoard();
   const players = [
     {
       name: playerOneName,
@@ -57,12 +57,69 @@ function GameController(
   };
   const getActivePlayer = () => activePlayer;
   const printNewRound = () => {
-    board.printBoard();
+    gameBoard.printBoard();
     console.log(`${getActivePlayer().name}'s turn.`);
   };
   const playRound = (row, column) => {
-    board.markSpace(row, column, getActivePlayer().symbol);
+    if (gameBoard.getBoard()[row][column].getValue() !== "") {
+      alert("Space already occupied!");
+      return;
+    }
+    gameBoard.markSpace(row, column, getActivePlayer().symbol);
+    if (checkForWinner()) {
+      alert(`The winner is ${activePlayer.name}!`);
+      console.log(`The winner is ${activePlayer.name}!`);
+      resetGame();
+    }
     switchPlayerTurn();
+    printNewRound();
+  };
+  const checkForWinner = () => {
+    const board = gameBoard.getBoard();
+    let winnerFound = false;
+    //check row
+    for (let i = 0; i < board.length; i++) {
+      const row = board[i];
+      if (row.every((cell) => cell.getValue() == activePlayer.symbol)) {
+        winnerFound = true;
+        break;
+      }
+    }
+    //check column
+    for (let i = 0; i < board.length; i++) {
+      const column = board.map((row) => row[i]);
+      if (column.every((cell) => cell.getValue() === activePlayer.symbol)) {
+        winnerFound = true;
+        break;
+      }
+    }
+    //check diagonal top-left to bottom-right
+    for (let i = 0; i < board.length; i++) {
+      const diagonal1 = board.map((row, index) => row[index]);
+      if (diagonal1.every((cell) => cell.getValue() === activePlayer.symbol)) {
+        winnerFound = true;
+        break;
+      }
+    }
+    //check diagonal top-right to bottom-left
+    for (let i = 0; i < board.length; i++) {
+      const diagonal1 = board.map(
+        (row, index) => row[board.length - index - 1]
+      );
+      if (diagonal1.every((cell) => cell.getValue() === activePlayer.symbol)) {
+        winnerFound = true;
+      }
+    }
+    return winnerFound;
+  };
+  const resetGame = () => {
+    gameBoard.getBoard().forEach((row) => {
+      row.forEach((cell) => {
+        cell.mark("");
+      });
+    });
+    activePlayer = players[0];
+    ScreenController().updateScreen();
     printNewRound();
   };
   printNewRound();
@@ -70,7 +127,7 @@ function GameController(
   return {
     playRound,
     getActivePlayer,
-    getBoard: board.getBoard,
+    getBoard: gameBoard.getBoard,
   };
 }
 function ScreenController() {
@@ -105,7 +162,7 @@ function ScreenController() {
   function clickHandlerBoard(e) {
     const selectedRow = e.target.dataset.row;
     const selectedColumn = e.target.dataset.column;
-    if (!selectedColumn) return;
+    if (!selectedColumn || !selectedRow) return;
 
     game.playRound(selectedRow, selectedColumn);
     updateScreen();
@@ -113,5 +170,6 @@ function ScreenController() {
   boardDiv.addEventListener("click", clickHandlerBoard);
   // Initial render
   updateScreen();
+  return { updateScreen };
 }
 ScreenController();
