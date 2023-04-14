@@ -6,10 +6,10 @@ The goal of the project is to build a fully functional Tic Tac Toe game applicat
 
 The project provides an opportunity to practice working on:
 
-Manipulating the DOM using JavaScript: In this project, developers will learn how to manipulate the HTML elements of a web page using JavaScript. They will also learn how to listen to events, such as mouse clicks, and handle them accordingly.
+1. Manipulating the DOM using JavaScript: In this project, developers will learn how to manipulate the HTML elements of a web page using JavaScript. They will also learn how to listen to events, such as mouse clicks, and handle them accordingly.
 
-Implementing game logic: Developers will learn how to implement the game logic for Tic Tac Toe. This involves checking if a player has won the game, updating the game board with each move, and handling ties.
+2. Implementing game logic: Developers will learn how to implement the game logic for Tic Tac Toe. This involves checking if a player has won the game, updating the game board with each move, and handling ties.
 
-Using CSS for styling: The project also provides an opportunity to practice using CSS to style the game board and other elements of the web page.
+3. Using CSS for styling: The project also provides an opportunity to practice using CSS to style the game board and other elements of the web page.
 
 https://pannsengpanich.github.io/tic-tac-toe/
