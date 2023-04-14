@@ -20,7 +20,7 @@ function GameBoard() {
   };
   const printBoard = () => {
     const boardWithCellValues = board.map((row) =>
-      row.map((cell) => cell.getValue()),
+      row.map((cell) => cell.getValue())
     );
     console.log(boardWithCellValues);
   };
@@ -38,7 +38,7 @@ function Cell() {
 
 function GameController(
   playerOneName = "Player One",
-  playerTwoName = "Player Two",
+  playerTwoName = "Player Two"
 ) {
   const board = GameBoard();
   const players = [
