@@ -9,6 +9,8 @@ The project provides an opportunity to practice working on:
 1. Manipulating the DOM using JavaScript: In this project, developers will learn how to manipulate the HTML elements of a web page using JavaScript. They will also learn how to listen to events, such as mouse clicks, and handle them accordingly.
 
 2. Implementing game logic: Developers will learn how to implement the game logic for Tic Tac Toe. This involves checking if a player has won the game, updating the game board with each move, and handling ties.
+(To create the Tic Tac Toe game, I used the Connect Four game code provided by the course as a reference and modified its logic to suit the rules of Tic Tac Toe.)
+https://replit.com/@40percentzinc/ConnectFourWithDOMSkeleton
 
 3. Using CSS for styling: The project also provides an opportunity to practice using CSS to style the game board and other elements of the web page.
 
